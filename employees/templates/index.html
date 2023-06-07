@@ -1,0 +1,235 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiregen.ai</title>
+    <link rel="stylesheet" href="{% static './styles/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static './styles/style.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
+        <div class="container">
+            <a class="navbar-brand font-weight" href="#">
+                <img src="{% static './images/hiregen-logo.png'%}" height="50px" alt="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link " aria-current="page" href="{% url 'main' %}">Home</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link nav-resume-finder" href="{% url 'resum' %}">Resume Finder</a>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">How it works</a></li>
+                      <li><a class="dropdown-item" href="#">Resume Finder</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </li> -->
+                  <li class="nav-item">
+                    <a class="nav-link nav-resume-finder" href="{% url 'jobsee' %}">Job Seeker</a>
+                  </li>
+                
+                    <li class="nav-item">
+                        <a class="nav-link">Contact us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="section-box pt-5">
+        <div class="container ">
+            <div class="row">
+                <div class="col-md-8 block-banner">
+                    <div class="">
+                        <h1 class="heading-banner hero-banner">Get The
+                            <span class="color-brand-2"></span>
+                            <a href="" class="typewrite" data-period="2000" style="color: blue;"
+                                data-type="[ &quot;Right Job&quot;, &quot;Right Resume&quot;, &quot;Right Company&quot; ]"><span
+                                    class="wrap"></span></a><br class="">You
+                            Deserve
+                        </h1>
+                    </div>
+                    <div class="banner-description banner-desc">Each month, more
+                        than 3 million job seekers turn to website in their search for work,<br
+                            class="d-none d-lg-block">making over 140,000 applications every single day
+                    </div>
+                    <div class="banner-description banner-desc mt-2">Job seeking is never fun, of course, but a
+                        well-prepared job seeker is more likely to find the process less stressful. Looking for work is
+                        not a science and there are many factors that come into play, but in conducting a job search in
+                        today's current market, there are a number of things that everyone will be happier to know from
+                        the outset.
+                    </div>
+
+                    <!-- <div class="strip-sec">
+                    <div class="container">
+                        <div class="row">
+                           <div class="col-lg-6 col-md-12 col-sm-12 left-sec">
+                              <img src="images/people-group.png" class="people-group" alt="">
+                              <div class="text">
+                                 <h2 class="mb-3">Your Looking for Tranding Jobs</h2>
+                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt .
+                                 </p>
+                              </div>
+                           </div>
+                           <div class="col-lg-6 col-md-12 col-sm-12 right-sec row m-0">
+                              <div class="col-lg-4 col-md-4 col-sm-12 ">
+                                 <img src="images/laptop.png" alt="">
+                                 <h5>Developer<span>7 Jobs</span></h5>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-12 ">
+                                 <img src="images/technology.png" alt="">
+                                 <h5>Technology<span>5 Jobs</span></h5>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-12">
+                                 <img src="images/government.png" alt="">
+                                 <h5>Government<span>2 Jobs</span></h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                    </div> -->
+                </div>
+                <div class="col-md-4">
+                    <img src="{% static './images/robotshowing.png'%}" width="100%" class="img-flip" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col-md-6 blue-background">
+                    <div class="container text-center">
+                        <div>
+                            <h5 class="">I'm</h5>
+                            <h3 class="">Resume Finder</h3>
+                            <p class="">Post a project to tell the world about your job
+                                requirements and resume-search.com will place the best freelancers who fit your need in
+                                front of you within seconds</p>
+                            <button type="button" class="btn-own">Try It</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 white-background ">
+                    <div class="container text-center">
+                        <div>
+                            <h5 class="">I'm</h5>
+                            <h3 class="">Job Seeker</h3>
+                            <p class="">Post a project to tell the world about your job
+                                requirements and resume-search.com will place the best freelancers who fit your need in
+                                front of you within seconds</p>
+                            <button type="button" class="btn-own">Try It</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-box1 pt-5">
+        <div class="container ">
+            <div class="row text-center">
+                <h3 class="section-box1-inner text-center mb-4">How It Works?</h3>
+                <div class="col-md-4 mt-3">
+                    <p class="home-icon-font"><i class="fa-regular fa-user"></i></p>
+                    <h4 class="mb-2">Create an Account</h4>
+                    <p class="home-text">First create a free account with simple registration form. Then create your
+                        detailed resume with our simple forms.</p>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <p class="home-icon-font"><i class="fa-solid fa-magnifying-glass"></i></p>
+                    <h4 class="mb-2">Search Jobs</h4>
+                    <p class="home-text">You can search as much jobs as you want and you can also search the resume of
+                        as many candidates.</p>
+                </div>
+                <div class="col-md-4 mt-3">
+                    <p class="home-icon-font"><i class="fa-solid fa-trophy"></i></p>
+                    <h4 class="mb-2">Apply or Chat</h4>
+                    <p class="home-text">you can apply to the relevent jobs and chat with the employer directly. Also
+                        chat with as many candidate around the world and explore new techonologies and jobs.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="footer">
+        <div class="footer-animate-gif">
+            <div class="footer-animate-gif-inner">
+                <!-- <img src="images/hossain.gif" alt=""> -->
+                <div class="container p-5">
+                    <div class="row">
+                        <div class="col-md-4 footer-heading">
+                            <div class="bg-white w-50 mb-3">
+                                <img src="{% static './images/hiregen-logo.png' %}" style="height: 50px;" alt="logo" class="mb-3">
+                            </div>
+
+                            <p class="text-white text-content-justify" style="font-size: 14px;">Resume Search is a free
+                                platform, where
+                                Employer can listout as many resume and chat with candidate dircetly and JobSeeker can
+                                apply to relevant job posted by employer.</p>
+                        </div>
+                        <div class="col-md-4 footer-links">
+                            <h3 class="text-white">Quick links</h3>
+
+                            <ul class="text-white pl-0">
+                                <li>
+                                    <a href="">
+                                        Resume Finder
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        JobSeeker
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 footer-links">
+                            <h3 class="text-white">Address</h3>
+                            <ul class="text-white pl-0">
+                                <li>
+                                    <a href="">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        singlepointsolutions.com
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/javascript.js' %}"></script>
+
+    
+</body>
+
+</html>

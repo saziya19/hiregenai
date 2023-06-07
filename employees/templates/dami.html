@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Template</title>
+</head>
+<body>
+    <h1>File Filtering Results</h1>
+
+    {% if count %}
+        <h2>Total number of files filtered: {{ count }}</h2>
+
+        <h3>Files with matching keywords and percentage above 75%:</h3>
+        {% if filtered_files %}
+            <ul>
+                {% for file in filtered_files %}
+                    <li>{{ file }} <a href="{{ file }}">Download</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No files found.</p>
+        {% endif %}
+
+        <h3>Files with matching percentage between 50% and 75%:</h3>
+        {% if filtered_files1 %}
+            <ul>
+                {% for file in filtered_files1 %}
+                    <li>{{ file }} <a href="{{ file }}">Download</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No files found.</p>
+        {% endif %}
+
+        <h3>Files with matching percentage below 50%:</h3>
+        {% if filtered_files2 %}
+            <ul>
+                {% for file in filtered_files2 %}
+                    <li>{{ file }} <a href="{{ file }}">Download</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No files found.</p>
+        {% endif %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="description" placeholder="Enter job description..."></textarea>
+        <br>
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

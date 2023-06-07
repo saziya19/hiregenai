@@ -1,0 +1,603 @@
+{% load static %}
+<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiregen.ai</title>
+    <link rel="stylesheet" href="{% static './styles/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static './styles/style.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+            .filtered-files-section {
+                display: none;
+            }
+        </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
+        <div class="container">
+            <a class="navbar-brand font-weight" href="#">
+                <img src="{% static  './images/hiregen-logo.png' %}" height="50px" alt="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link " aria-current="page" href="{% url 'main' %}">Home</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link nav-resume-finder" href="{% url 'resum' %}">Resume Finder</a>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">How it works</a></li>
+                      <li><a class="dropdown-item" href="#">Resume Finder</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link nav-resume-finder" href="{% url 'jobsee' %}">Job Seeker</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Contact us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="inner-banner">
+        <div class="container-fluid ">
+            <div class="text-center">
+                <h1 class="text-white">Resume Search</h1>
+                <div class="container resume-input-fields" id="job-classic-view">
+                    <form method="GET" action="{% url 'search_resumes' %}">
+                        <div class="row mt-4">
+                            <div class="col-md-5">
+                                <input type="text" name="technologies" placeholder="Technologies" value="{{ technologies }}">
+                                <!-- <label for="" class="text-left">Job Title / Skills</label> -->
+                                <input type="text" class="form-control" placeholder="Job Title / Skills">
+                            </div>
+                            <div class="col-md-2">
+                                <!-- <label for="" class="text-left">Location</label> -->
+                                <input type="text" class="form-control" placeholder="Location">
+                            </div>
+                            <div class="col-md-2">
+                                <!-- <label for="" class="text-left">Experience</label> -->
+                                <select name="" id="" class="form-control">
+                                    <option value="experience">Experience</option>
+                                    <option value="any">Any</option>
+                                    <option value="0">0 (Fresher)</option>
+                                    <option value="6M">06 Months</option>
+                                    <option value="1Y">1 Year</option>
+                                    <option value="1.5Y">1.5 Years</option>
+                                    <option value="2Y">2 Years</option>
+                                    <option value="3Y">3 Years</option>
+                                    <option value="3+">3+ Years</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 ">
+                                <a href={% url 'search_resumes' %}><button type="button" class="btn-own p-1 me-3">Search</button></a>
+                                <button type="button" class="btn-own p-1" onclick="compactView()">Compact view</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="container resume-input-fields" id="job-compact-view">
+                    <form action="{% url 'filtered_files' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <label for="" class="text-left mb-2">Enter detailed job description</label>
+                                <textarea name="description" id="" cols="30" class="form-control" placeholder="e.g. I want a person with the technologies of Java, Selinium with 5+ years of experience..."></textarea>
+                            </div>
+                        </div>
+                       
+                        <div class="text-center mt-3 ">
+                            <a href={% url 'filtered_files' %}><button type="button" class="btn-own p-1 me-3">Search</button></a>
+                            <button type="button" class="btn-own p-1" onclick="classicView()">Classic view</button>
+                        </div>
+                            </form>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="resume_search_section_color">
+        <div class="container">
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>NUMBER OF FILES FILTERED</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                   
+                   
+
+                     <p>Total files filtered: {{ count }}</p>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>FILES TO DOWNLOAD ABOVE 75%</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <table class='table  table-borderless'>
+                        <thead class='text-center'>
+                            <tr  class="table-secondary">
+                                <th>
+                                    Resume Name
+                                </th>
+                                
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class='text-center'>
+                            <tr>
+                                <td>
+                                {% for file in filtered_files %}
+                                <li>{{ file }}</li>
+                                {% comment %} <a href="{% url 'download_file' filename=file %}">Download {{ file }}</a> {% endcomment %}
+                                {% endfor %}
+                                 
+                                <td>
+                                
+                                
+                                <td>
+                                   
+                                    {% for file in filtered_files %}
+                                    <div>
+                                        <a href="{% url 'download_file' filename=file %}" download>Download</a>
+
+                                    {% comment %} <a href="{{ file }}" download>Download</a> {% endcomment %}
+                                    {% comment %} <a href="{{ file.url }}" download>{{ file.name }}<button>Download</button></a> {% endcomment %}
+                                            {% comment %} <button><a href="{% url 'download_file' file  %}" download>Download</a></button> {% endcomment %}
+                               
+                                    {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% comment %} <tr>
+                                <td>Lalitha resume</td>
+                               
+                                <td> <button class='btn btn-primary btn-sm'>Download</button> </td>
+                            </tr>
+                            <tr>
+                                <td>Lalitha resume</td>
+                                
+                                <td> <button class='btn btn-primary btn-sm'>Download</button> </td>
+                            </tr> {% endcomment %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>FILES WITH MATCHING and MATCHING KEYWORDS PERCENTAGE ABOVE 75%</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>                        </div>
+                    </div> {% endcomment %}
+
+                    {% comment %} <table class='table  table-borderless'>
+                        <thead class='text-center'>
+                            <tr>
+                                <th>
+                                    Resume Name
+                                </th>
+                                <th>
+                                    Percentage Matching
+                                </th>
+                                <th>
+                                    Matched Keywords
+                                </th>
+                                <th>
+                                    Years Of Experience
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class='text-center'>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table> {% endcomment %}
+
+                    <ul class="list-style">
+                        <p>{{matching_files_str | linebreaks}}</p>
+                        
+                    </ul>
+                
+                </div>
+            </div>
+            
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>FILES TO DOWNLOAD BETWEEN 50% TO 75%</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <table class='table  table-borderless'>
+                        <thead class='text-center'>
+                            <tr  class="table-secondary">
+                                <th>
+                                    Resume Name
+                                </th>
+                               
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class='text-center'>
+                            <tr>
+                                <td>
+                                {% for file in filtered_files1 %}
+                                <li>{{ file }}</li>
+                                 {% endfor %}
+                            
+                                </td>
+                                
+                                
+                                <td>
+                                   
+                                    {% for file in filtered_files1 %}
+                                    <div>
+                                        <a href="{% url 'download_file' filename=file %}" download>Download</a>
+                                        {% comment %} <a href="{% url 'download_file' filename=file %}" download>Download</a> {% endcomment %}
+
+                                    {% comment %} <a href="{{ file }}" download>Download</a> {% endcomment %}
+                                         {% comment %} <button><a href="{% url 'download_file' file %}" download>Download</a></button> {% endcomment %}
+                                
+                                    {% endfor %}
+                                    </div>
+                                </td>
+                               
+                            </tr>
+                            {% comment %} <tr>
+                                <td>Lalitha resume</td>
+                                
+                                
+                            </tr>
+                            <tr>
+                                <td>Lalitha resume</td>
+                                
+                                <td> <button class='btn btn-primary btn-sm'>Download</button> </td>
+                            </tr> {% endcomment %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>FILES WITH MATCHING PERCENTAGE and MATCHING KEYWORDS PERCENTAGE BETWEEN 50% to 75%</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>                        </div>
+                    </div> {% endcomment %}
+
+                    {% comment %} <table class='table  table-borderless'>
+                        <thead class='text-center'>
+                            <tr>
+                                <th>
+                                    Resume Name
+                                </th>
+                                <th>
+                                    Percentage Matching
+                                </th>
+                                <th>
+                                    Matched Keywords
+                                </th>
+                                <th>
+                                    Years Of Experience
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class='text-center'>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table> {% endcomment %}
+
+                    <ul class="list-style">
+                        
+                        <p>{{matching_files_str1 | linebreaks}}</p>
+                    </ul>
+                
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>FILES TO DOWNLOAD BELOW 50%</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <table class='table  table-borderless'>
+                        <thead class='text-center'>
+                            <tr class="table-secondary">
+                                <th>
+                                    Resume Name
+                                </th>
+                               
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class='text-center'>
+                            <tr>
+                                <td>
+                                    {% for file in filtered_files2 %}
+                                    <li>{{ file }}</li>
+                                {% endfor %}
+                              
+                                </td>
+                               
+                               
+                                <td>
+                                   
+                                    {% for file in filtered_files2 %}
+                                    <div>
+                                        <a href="{% url 'download_file' filename=file %}" download>Download</a>
+
+                                        {% comment %} <a href="{{ file }}" download>Download</a> {% endcomment %}
+                                    {% comment %} <a href="{{ file.url }}" download>{{ file.name }}<button>Download</button></a> {% endcomment %}
+                                           {% comment %} <button><a href="{% url 'download_file' file %}" download>Download</a></button> {% endcomment %}
+                                    </div>
+                                    {% endfor %}
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h6>FILES WITH MATCHING and MATCHING KEYWORDS PERCENTAGE BELOW 50%</h6>
+                </div>
+                <div class="card-body">
+                    {% comment %} <div class="row">
+                        <div class="col-md-10">
+                            <p>AlgoFno Technologies Pvt Ltd </p>
+                            <p>Hyderabad</p>
+                            <p>BE/B.Tech, ME/M.Tech</p>
+                        </div>
+                        <div class="col-md-2 border-left">
+                            <div class="mt-3 vertical-center ms-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                            </div>                        </div>
+                    </div> {% endcomment %}
+
+                    {% comment %} <table class='table  table-borderless'>
+                        <thead class='text-center'>
+                            <tr>
+                                <th>
+                                    Resume Name
+                                </th>
+                                <th>
+                                    Percentage Matching
+                                </th>
+                                <th>
+                                    Matched Keywords
+                                </th>
+                                <th>
+                                    Years Of Experience
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class='text-center'>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            <tr>
+                                <td>Naukri_GaliBharadwajaMaharsi[8y_0m].docx.</td>
+                                <td> 100% </td>
+                                <td> HTML5, CSS3, JavaScript, jQuery, NodeJs,  </td>
+                                <td> 7 Years </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table> {% endcomment %}
+
+                    <ul class="list-style">
+                        <p>{{matching_files_str2 | linebreaks}}</p>
+                    </ul>
+                
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+
+
+
+    <section class="footer footer-inner">
+        <div class="footer-animate-gif">
+            <div class="footer-animate-gif-inner">
+                <!-- <img src="images/hossain.gif" alt=""> -->
+                <div class="container p-5">
+                    <div class="row">
+                        <div class="col-md-4 footer-heading">
+                            <div class="bg-white w-50 mb-3">
+                                <img src="{% static './images/hiregen-logo.png'%}" height="50px" alt="logo" class="mb-3">
+                            </div>
+
+                            <p class="text-white text-content-justify" style="font-size: 14px;">Resume Search is a free
+                                platform, where
+                                Employer can listout as many resume and chat with candidate dircetly and JobSeeker can
+                                apply to relevant job posted by employer.</p>
+                        </div>
+                        <div class="col-md-4 footer-links">
+                            <h3 class="text-white">Quick links</h3>
+
+                            <ul class="text-white pl-0">
+                                <li>
+                                    <a href="">
+                                        Resume Finder
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        JobSeeker
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 footer-links">
+                            <h3 class="text-white">Address</h3>
+                            <ul class="text-white pl-0">
+                                <li>
+                                    <a href="">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        singlepointsolutions.com
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    </body>
+    <script>
+        document.getElementById('job-classic-view').style.display = 'none';
+        function classicView() {
+            document.getElementById('job-compact-view').style.display = 'none';
+            document.getElementById('job-classic-view').style.display = 'block';
+        }
+        function compactView() {
+            console.log('compact');
+            document.getElementById('job-compact-view').style.display = 'block';
+            document.getElementById('job-classic-view').style.display = 'none';
+        }
+    </script>
+
+</html>
